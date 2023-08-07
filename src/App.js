@@ -1,25 +1,38 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react'
+
+import axios from 'axios';
+
 import './App.css';
 
-function App() {
+import ContactCard from './Components/ContactCard'
+
+function AddressBookFunction(){
+  const [arrayOfUsers, setArrayOfUsers] = useState([])
+
+  useEffect(()=>{
+    axios.get("https://randomuser.me/api?results=25")
+      .then(res => {
+        const contacts = res.data.results
+        setArrayOfUsers(contacts)
+      })
+    }, [])
+
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Address Book</h1>
+        {
+          arrayOfUsers.map((contact, index)=>{
+          return(
+           <ContactCard key={index} contactInfo={contact}/> 
+          );
+        })
+        }
       </header>
     </div>
   );
+  
 }
 
-export default App;
+export default AddressBookFunction;
